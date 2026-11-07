@@ -12,7 +12,7 @@ Original MIT license and source history are preserved.
 - Claude Code installation: `~/.claude/skills/`
 - `origin` points to CarrStack and is the only configured Git remote.
 
-All nine skills are installed globally, so they can be used across projects.
+All eight skills are installed globally, so they can be used across projects.
 They are copies: after editing a skill in this repository, copy it into both
 installation directories to activate the change. From this repository:
 
@@ -23,8 +23,7 @@ cp -R skills/. ~/.claude/skills/
 
 Codex will discover newly installed skills on the next turn. Start a new
 Claude Code session to load its skills. Examples: `full stop`, `file a PR`,
-`sol loop`, or `council`. `full send` includes merging a PR; `full stop`
-leaves the merge for you.
+`sol loop`, or `council`. `full stop` leaves the merge for you.
 
 Keep personal model preferences in project `AGENTS.md` or `CLAUDE.md` files,
 so skill updates preserve them. Cross-provider reviews need the relevant
@@ -41,8 +40,7 @@ not.
 
 | Skill | Say | What it does |
 |---|---|---|
-| `full-send` | "full send" | Takes a change to a merged PR with nobody watching: proves it, reviews it, files it, babysits it, merges it. |
-| `full-stop` | "full stop" | Same as `full-send`, but stops when the PR is ready for you to merge. |
+| `full-stop` | "full stop" | Completes, validates, reviews, and prepares a PR for you to merge. |
 | `council` | "council" | Gets review from three models from different providers, and loops until they agree. |
 | `sol-loop` | "sol loop" | Reviews a change with GPT Sol in a loop until both agents agree. |
 | `file-pr` | "file a PR" | Files a short PR that leads with the problem, not an inventory of changes. |
@@ -53,8 +51,7 @@ not.
 
 Some skills call others. Install the ones they need too:
 
-- `full-send` uses `sol-loop`, `file-pr`, and `babysit-pr`.
-- `full-stop` uses `full-send`.
+- `full-stop` uses `sol-loop`, `file-pr`, and `babysit-pr`.
 - `takeover` uses `modernize`, `file-pr`, `babysit-pr`, and `leaving-pr-comments`.
 - `file-pr`, `babysit-pr`, and `modernize` use `leaving-pr-comments`.
 

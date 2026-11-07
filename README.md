@@ -1,4 +1,41 @@
-# tstack
+# CarrStack
+
+Sean Carr's private collection of agent skills, based on
+[Theo Browne's tstack](https://github.com/t3dotgg/tstack).
+Original MIT license and upstream history are preserved.
+
+## This computer
+
+- Source and T3 Code project: `/Users/seancarr/projects/carrStack`
+- Private GitHub repository: `https://github.com/SeanC818/carrStack`
+- Codex installation: `~/.codex/skills/`
+- Claude Code installation: `~/.claude/skills/`
+- `origin` points to CarrStack; `upstream` points to `t3dotgg/tstack`.
+
+All nine skills are installed globally, so they can be used across projects.
+They are copies: after editing a skill in this repository, copy it into both
+installation directories to activate the change. From this repository:
+
+```bash
+cp -R skills/. ~/.codex/skills/
+cp -R skills/. ~/.claude/skills/
+```
+
+Codex will discover newly installed skills on the next turn. Start a new
+Claude Code session to load its skills. Examples: `full stop`, `file a PR`,
+`sol loop`, or `council`. `full send` includes merging a PR; `full stop`
+leaves the merge for you.
+
+To bring in upstream updates, start with a clean working tree, run
+`git fetch upstream`, then `git merge upstream/main`. Review and resolve
+any conflicts, copy the updated skills into both installations, and push
+your changes to `origin`.
+
+Keep personal model preferences in project `AGENTS.md` or `CLAUDE.md` files,
+as upstream recommends. Cross-provider reviews need the relevant providers
+configured in T3 Code.
+
+## Upstream documentation
 
 The agent skills I use every day, cleaned up so anyone can use them. They work
 in Claude Code and Codex. Some use [T3 Code](https://github.com/pingdotgg/t3code)

@@ -2,7 +2,7 @@
 
 Sean Carr's private collection of agent skills, based on
 [Theo Browne's tstack](https://github.com/t3dotgg/tstack).
-Original MIT license and upstream history are preserved.
+Original MIT license and source history are preserved.
 
 ## This computer
 
@@ -10,7 +10,7 @@ Original MIT license and upstream history are preserved.
 - Private GitHub repository: `https://github.com/SeanC818/carrStack`
 - Codex installation: `~/.codex/skills/`
 - Claude Code installation: `~/.claude/skills/`
-- `origin` points to CarrStack; `upstream` points to `t3dotgg/tstack`.
+- `origin` points to CarrStack and is the only configured Git remote.
 
 All nine skills are installed globally, so they can be used across projects.
 They are copies: after editing a skill in this repository, copy it into both
@@ -26,16 +26,11 @@ Claude Code session to load its skills. Examples: `full stop`, `file a PR`,
 `sol loop`, or `council`. `full send` includes merging a PR; `full stop`
 leaves the merge for you.
 
-To bring in upstream updates, start with a clean working tree, run
-`git fetch upstream`, then `git merge upstream/main`. Review and resolve
-any conflicts, copy the updated skills into both installations, and push
-your changes to `origin`.
-
 Keep personal model preferences in project `AGENTS.md` or `CLAUDE.md` files,
-as upstream recommends. Cross-provider reviews need the relevant providers
-configured in T3 Code.
+so skill updates preserve them. Cross-provider reviews need the relevant
+providers configured in T3 Code.
 
-## Upstream documentation
+## About the skills
 
 The agent skills I use every day, cleaned up so anyone can use them. They work
 in Claude Code and Codex. Some use [T3 Code](https://github.com/pingdotgg/t3code)
@@ -66,9 +61,10 @@ Some skills call others. Install the ones they need too:
 ## Install
 
 ```bash
-git clone https://github.com/t3dotgg/tstack
-cp -R tstack/skills/* ~/.claude/skills/   # Claude Code
-cp -R tstack/skills/* ~/.codex/skills/    # Codex
+git clone https://github.com/SeanC818/carrStack
+mkdir -p ~/.claude/skills ~/.codex/skills
+cp -R carrStack/skills/. ~/.claude/skills/   # Claude Code
+cp -R carrStack/skills/. ~/.codex/skills/    # Codex
 ```
 
 ## Requirements

@@ -1,8 +1,6 @@
 # CarrStack
 
-Sean Carr's private collection of agent skills, based on
-[Theo Browne's tstack](https://github.com/t3dotgg/tstack).
-Original MIT license and source history are preserved.
+Sean Carr's private collection of agent skills
 
 ## Managing skills
 

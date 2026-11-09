@@ -72,6 +72,20 @@ cp -R carrStack/skills/. ~/.codex/skills/    # Codex
   does this with `delegate_task`. Otherwise you need a harness that can run
   those models.
 
+## Azure DevOps variants
+
+`skills-ado/` holds Azure DevOps versions of the PR skills (`babysit-pr`,
+`council`, `file-pr`, `full-send`, `full-stop`, `leaving-pr-comments`,
+`modernize`, `sol-loop`, `takeover`). They use `az` instead of `gh` and
+authenticate with `az login`. Install them instead of `skills/` on machines
+that work against Azure DevOps:
+
+```bash
+cp -R carrStack/skills-ado/. ~/.claude/skills/
+```
+
+`babysit-pr` here needs `python3` for `scripts/pr-wait.py`, and the Azure CLI.
+
 ## Make them yours
 
 These are starting points. Edit them. Put personal settings, like which models

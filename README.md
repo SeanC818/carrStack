@@ -4,22 +4,21 @@ Sean Carr's private collection of agent skills, based on
 [Theo Browne's tstack](https://github.com/t3dotgg/tstack).
 Original MIT license and source history are preserved.
 
-## This computer
+## Managing skills
 
-- Source and T3 Code project: `/Users/seancarr/projects/carrStack`
+GitHub is the source of truth. Edit skills in this repository, push, then run
+the sync script on each machine. It pulls and installs into `~/.claude/skills/`
+and `~/.codex/skills/`. Each synced skill folder is replaced, so local edits to
+synced skills are overwritten. Skills not in this repository are left alone.
+
+| Machine | Repository | Variant | Sync |
+|---|---|---|---|
+| Mac | `/Users/seancarr/projects/carrStack` | `skills/` (GitHub) | `./scripts/sync.sh` |
+| Windows (work) | `C:\Users\Sean Carr\carrStack` | `skills-ado/` (Azure DevOps) | `.\scripts\sync.ps1` |
+
 - Private GitHub repository: `https://github.com/SeanC818/carrStack`
-- Codex installation: `~/.codex/skills/`
-- Claude Code installation: `~/.claude/skills/`
 - `origin` points to CarrStack and is the only configured Git remote.
-
-All eight skills are installed globally, so they can be used across projects.
-They are copies: after editing a skill in this repository, copy it into both
-installation directories to activate the change. From this repository:
-
-```bash
-cp -R skills/. ~/.codex/skills/
-cp -R skills/. ~/.claude/skills/
-```
+- `sync.sh ado` or `sync.ps1 -Variant github` installs the other variant.
 
 Codex will discover newly installed skills on the next turn. Start a new
 Claude Code session to load its skills. Examples: `full stop`, `file a PR`,

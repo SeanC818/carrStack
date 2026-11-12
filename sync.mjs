@@ -360,8 +360,8 @@ editing a skill in either place edits the repo. Create new skills in
 
 A background watcher commits and pushes edits there, pulls edits made on other
 machines, and links new skills. The user cannot see its health, so after editing
-a skill run \`node ${root}/sync.mjs --status\`. If the watcher is not running, run
-\`node ${root}/sync.mjs\`, which commits, pulls, pushes and links once. If it
+a skill run \`node "${root}/sync.mjs" --status\`. If the watcher is not running,
+run \`node "${root}/sync.mjs"\`, which commits, pulls, pushes and links once. If it
 reports any other problem, tell the user.
 ${MARK_END}`;
 }

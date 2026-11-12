@@ -12,8 +12,9 @@ PR still belongs in the product.
 
 ## Guardrails
 
-- Always check to make sure you have pulled latest origin for your branch, main
-  branch, and any other branch related to your work before starting.
+- Always fetch the latest remote for your branch, the PR's base branch, and
+  any other branch related to your work before starting. On Azure DevOps the
+  remote is the one whose URL contains `dev.azure.com`; never assume `origin`.
 - Treat existing worktree changes as user-owned. Use a disposable worktree when
   the active worktree is dirty or is being used for other work.
 - Modernizing authorizes rebasing and updating the PR branch. It does not
@@ -26,19 +27,24 @@ PR still belongs in the product.
 ## Establish the PR's intent
 
 Resolve the PR and record its URL, state, base, head repository and branch,
-current head SHA, author, checks, and review state. Read the title, body, linked
+current head SHA, author, checks, and review state. On Azure DevOps use
+`az repos pr show --id <n> --org $ORG` (`status`, `targetRefName`,
+`sourceRefName`, `lastMergeSourceCommit.commitId`), `az repos pr policy list`
+for checks, and reviewer votes. See
+[babysit-pr's Azure DevOps reference](../babysit-pr/references/azure-devops.md). Read the title, body, linked
 issues, commits, review threads, and complete diff. State the smallest coherent
 goal the PR was trying to accomplish before judging its implementation.
 
 Fetch the latest remote base and PR head. Use the PR's actual base branch,
-usually `main`, rather than assuming the local branch is current. Record the
+usually `main` on GitHub and often a sprint or release branch on Azure
+DevOps, rather than assuming the local branch is current. Record the
 merge base so the original PR and subsequent base-branch changes can be
 compared separately.
 
 ## Check what changed around it
 
 Inspect commits and diffs added to the base branch since the PR diverged. Search
-merged and open PRs when titles, code paths, or behavior suggest a replacement
+merged and open PRs (`az repos pr list --status all` on Azure DevOps) when titles, code paths, or behavior suggest a replacement
 or competing implementation.
 
 Look beyond overlapping lines:
@@ -64,7 +70,7 @@ Use one of these recommendations:
   before pushing unless the user also asked for that rework.
 - **CLOSE**: the PR is superseded, obsolete, directionally wrong, or no longer
   worth its cost. Cite concrete evidence and stop. Do not spend time rebasing an
-  obsolete branch, and do not close it without explicit permission.
+  obsolete branch, and do not close or abandon it without explicit permission.
 
 Be willing to recommend `CLOSE`. Age alone is not evidence, and sunk effort is
 not a reason to keep a PR alive.

@@ -2,38 +2,66 @@
 
 Sean Carr's private collection of agent skills
 
-## Managing skills
+## How syncing works
 
-GitHub is the source of truth. Edit skills in this repository, push, then run
-the sync script on each machine. It pulls and installs into `~/.claude/skills/`
-and `~/.codex/skills/`. Each synced skill folder is replaced, so local edits to
-synced skills are overwritten. Skills not in this repository are left alone.
+GitHub is the source of truth. Each machine has a clone, and every skill in
+`~/.claude/skills/` and `~/.codex/skills/` is a link into the clone's
+`skills/` folder (a directory junction on Windows, a symlink on macOS). Editing
+a skill in either place edits the repo.
 
-| Machine | Repository | Variant | Sync |
-|---|---|---|---|
-| Mac | `/Users/seancarr/projects/carrStack` | `skills/` (GitHub) | `./scripts/sync.sh` |
-| Windows (work) | `C:\Users\Sean Carr\carrStack` | `skills-ado/` (Azure DevOps) | `.\scripts\sync.ps1` |
+A background watcher on each machine:
 
-- Private GitHub repository: `https://github.com/SeanC818/carrStack`
-- `origin` points to CarrStack and is the only configured Git remote.
-- `sync.sh ado` or `sync.ps1 -Variant github` installs the other variant.
+- commits and pushes edits a few seconds after they settle,
+- pulls edits from other machines every 5 minutes,
+- links new skills and removes links to deleted ones.
 
-Codex will discover newly installed skills on the next turn. Start a new
-Claude Code session to load its skills. Examples: `full stop`, `file a PR`,
-`sol loop`, or `council`. `full stop` leaves the merge for you.
+It never merges. If two machines edit the same lines, it stops and
+`node sync.mjs --status` says so. Resolve with `git pull --rebase`, then
+`node sync.mjs --restart`.
 
-Keep personal model preferences in project `AGENTS.md` or `CLAUDE.md` files,
-so skill updates preserve them. Cross-provider reviews need the relevant
-providers configured in T3 Code.
+Skills that are not in this repository are left alone. Skill folders listed
+under `retired` in `carrstack.json` are backed up to `.state/backups/` and
+removed.
 
-## About the skills
+| Machine | Clone |
+|---|---|
+| Mac | `/Users/seancarr/projects/carrStack` |
+| Windows (work) | `C:\Users\Sean Carr\carrStack` |
+| Windows (second PC) | wherever you clone it |
 
-The agent skills I use every day, cleaned up so anyone can use them. They work
-in Claude Code and Codex. Some use [T3 Code](https://github.com/pingdotgg/t3code)
-features when they are available and fall back to native tools when they are
-not.
+## Setup on a machine
+
+Needs `node` and `git` with push access to this repo.
+
+```bash
+git clone https://github.com/SeanC818/carrStack
+node carrStack/sync.mjs --install
+```
+
+`--install` links the skills, backing up any existing skill folder with the
+same name to `.state/backups/`. It adds a marked section to `~/.claude/CLAUDE.md`
+and `~/.codex/AGENTS.md` that tells agents how the sync works, and starts the
+watcher at login: a hidden Startup-folder launcher on Windows, a LaunchAgent on
+macOS. Re-run it after moving the clone.
+
+## Commands
+
+```bash
+node sync.mjs              # commit, pull, push and link now
+node sync.mjs --status     # watcher health, repo state, broken links
+node sync.mjs --restart    # restart the watcher, e.g. after resolving a conflict
+node sync.mjs --stop
+node sync.mjs --uninstall  # stop the watcher and remove it from login
+```
+
+Start a new Claude Code session to load skill changes. Codex picks them up on
+the next turn.
 
 ## Skills
+
+Every skill works with GitHub and Azure DevOps. Skills that differ by platform
+check `git remote -v` and read `references/github.md` or
+`references/azure-devops.md`.
 
 | Skill | Say | What it does |
 |---|---|---|
@@ -46,48 +74,23 @@ not.
 | `modernize` | "modernize" | Rebases an old PR and decides if it should still exist. |
 | `leaving-pr-comments` | (automatic) | Formats comments that an agent posts on your behalf. |
 
-Some skills call others. Install the ones they need too:
+Some skills call others:
 
 - `full-stop` uses `sol-loop`, `file-pr`, and `babysit-pr`.
 - `takeover` uses `modernize`, `file-pr`, `babysit-pr`, and `leaving-pr-comments`.
 - `file-pr`, `babysit-pr`, and `modernize` use `leaving-pr-comments`.
 
-## Install
-
-```bash
-git clone https://github.com/SeanC818/carrStack
-mkdir -p ~/.claude/skills ~/.codex/skills
-cp -R carrStack/skills/. ~/.claude/skills/   # Claude Code
-cp -R carrStack/skills/. ~/.codex/skills/    # Codex
-```
+Keep personal model preferences in project `AGENTS.md` or `CLAUDE.md` files.
+Cross-provider reviews need the relevant providers configured in T3 Code.
 
 ## Requirements
 
-- An authenticated [GitHub CLI](https://cli.github.com) (`gh`).
-- `python3` for `babysit-pr`'s `pr-wait` script.
+- GitHub: an authenticated [GitHub CLI](https://cli.github.com) (`gh`), and
+  `python3` for `babysit-pr`'s `scripts/pr-wait`.
+- Azure DevOps: the Azure CLI with the `azure-devops` extension, signed in with
+  `az login`, and `python` for `babysit-pr`'s `scripts/pr-wait-ado.py`.
 - `council` and `sol-loop` need subagents on other providers' models. T3 Code
-  does this with `delegate_task`. Otherwise you need a harness that can run
-  those models.
-
-## Azure DevOps variants
-
-`skills-ado/` holds Azure DevOps versions of the PR skills (`babysit-pr`,
-`council`, `file-pr`, `full-send`, `full-stop`, `leaving-pr-comments`,
-`modernize`, `sol-loop`, `takeover`). They use `az` instead of `gh` and
-authenticate with `az login`. Install them instead of `skills/` on machines
-that work against Azure DevOps:
-
-```bash
-cp -R carrStack/skills-ado/. ~/.claude/skills/
-```
-
-`babysit-pr` here needs `python3` for `scripts/pr-wait.py`, and the Azure CLI.
-
-## Make them yours
-
-These are starting points. Edit them. Put personal settings, like which models
-sit on your council, in your `CLAUDE.md` or `AGENTS.md`, so you can update the
-skills without losing them.
+  does this with `delegate_task`.
 
 ## License
 

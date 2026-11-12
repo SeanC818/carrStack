@@ -35,13 +35,23 @@ Disable existing auto-merge and remove the PR from any merge queue before
 work begins; check again before each push. Report these changes. If you
 cannot prevent automatic merging, report the blocker before proceeding.
 
+On Azure DevOps, merging is completing the PR. Check `autoCompleteSetBy` with
+`az repos pr show`. If it is set, turn it off with
+`az repos pr update --id <n> --org $ORG --auto-complete false`. Never use
+`--bypass-policy`.
+
 ## Stop at the gate
 
 Validation and review must cover the final diff. Recheck behavior changes
 and meaningful conflict fixes before handoff. Readiness requires relevant
 validation to pass, required checks to be green, review bots to finish with
 findings addressed or dismissed with reasons, no outstanding requests for
-changes, and an up-to-date branch that GitHub reports as mergeable.
+changes, and an up-to-date branch that the platform reports as mergeable. On Azure
+DevOps that means `mergeStatus: succeeded` and every blocking policy
+`approved` or `notApplicable`. A required human approval is a real blocker:
+never approve your own PR to satisfy it. See
+[babysit-pr's references](../babysit-pr/references/) for each platform's
+merge gate.
 
 Fetch the target branch and check the live PR's head, base, checks, reviews,
 and mergeability. Confirm it is open, not a draft, and not set to merge

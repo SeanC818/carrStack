@@ -45,7 +45,10 @@ Rounds: 2
 ```
 
 If a delegate gives no score, write `no score`. Do not invent one.
-If the PR is open, edit the description. Do not post a comment for this.
+If the PR is open, edit the description. On Azure DevOps use
+`az repos pr update --id <n> --org $ORG --description @<file>`. ADO caps
+descriptions at 4000 characters, so trim the table before the summary text.
+Do not post a comment for this.
 If there is no PR, put the same results in the final reply only.
 
 If you agree with their recommendations, make the changes and request a fresh

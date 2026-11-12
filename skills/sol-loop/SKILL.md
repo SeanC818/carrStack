@@ -30,13 +30,17 @@ Run `git status --short`. Do not stash, discard, or include unrelated
 changes. Limit review to the change paths if they separate cleanly.
 Otherwise stop and ask.
 
-Find the base after `git fetch origin`:
+Find the base after `git fetch <remote>`. On GitHub the remote is usually
+`origin`. On Azure DevOps it is the remote whose URL contains `dev.azure.com`
+or `visualstudio.com`; never assume `origin`.
 
-- PR: `gh pr view <n> --json baseRefName,headRefOid`. Check out the branch
-  only if clean. Confirm `HEAD` is the PR head, or ahead only by this
-  change. Base: `git merge-base HEAD origin/<baseRefName>`.
-- Local: `git merge-base HEAD origin/<default-branch>`. No remote: a base
-  the user names, or `HEAD` for uncommitted changes only.
+- GitHub PR: `gh pr view <n> --json baseRefName,headRefOid`.
+- Azure DevOps PR: `az repos pr show --id <n> --org $ORG --query "{target:targetRefName,head:lastMergeSourceCommit.commitId}"`.
+- For either, check out the branch only if clean. Confirm `HEAD` is the PR
+  head, or ahead only by this change. Base: `git merge-base HEAD <remote>/<base>`.
+- Local: `git merge-base HEAD <remote>/<branch this will target>`, inferred
+  as `file-pr` does, and ask if unclear. No remote: a base the user names, or
+  `HEAD` for uncommitted changes only.
 
 The change is base to working tree in those paths, with untracked files.
 Use one diff command all rounds. State intent and out-of-scope in 1-2

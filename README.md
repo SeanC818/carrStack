@@ -40,7 +40,8 @@ node carrStack/sync.mjs --install
 
 `--install` links the skills, backing up any existing skill folder with the
 same name to `.state/backups/`. It adds a marked section to `~/.claude/CLAUDE.md`
-and `~/.codex/AGENTS.md` that tells agents how the sync works, and starts the
+and `~/.codex/AGENTS.md` that tells agents how the sync works and where your
+Lifeboard is (each sync refreshes it), and starts the
 watcher at login: a hidden Startup-folder launcher on Windows, a LaunchAgent on
 macOS. Re-run it after moving the clone.
 
@@ -73,6 +74,7 @@ check `git remote -v` and read `references/github.md` or
 | `babysit-pr` | "babysit" | Watches a PR through CI and review bots, and fixes the real findings. |
 | `modernize` | "modernize" | Rebases an old PR and decides if it should still exist. |
 | `leaving-pr-comments` | (automatic) | Formats comments that an agent posts on your behalf. |
+| `lifeboard` | "add to my board", "what's on today" | Reads and updates your Lifeboard (to-dos, events, notes, daily brief) through its MCP server. |
 
 Some skills call others:
 

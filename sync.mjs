@@ -216,6 +216,7 @@ function exchange(reason) {
       }
     }
     const notes = link();
+    writeInstructions();
     for (const n of notes) log(n);
     const parts = [reason];
     if (behind) parts.push(`pulled ${behind}`);
@@ -363,6 +364,13 @@ machines, and links new skills. The user cannot see its health, so after editing
 a skill run \`node "${root}/sync.mjs" --status\`. If the watcher is not running,
 run \`node "${root}/sync.mjs"\`, which commits, pulls, pushes and links once. If it
 reports any other problem, tell the user.
+
+## Lifeboard
+
+The user keeps their to-dos, reminders, events and daily brief on Lifeboard, a
+personal board with an MCP server at https://lifeboard.seancarr818.workers.dev/mcp.
+When they mention a task, reminder, deadline, their day, or ask you to "add" or
+"track" something, use the \`lifeboard\` skill and its MCP tools.
 ${MARK_END}`;
 }
 

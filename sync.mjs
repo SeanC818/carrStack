@@ -34,6 +34,10 @@ const home = (envVar, fallback) => process.env[envVar] || path.join(os.homedir()
 const CLAUDE_DIR = home('CLAUDE_CONFIG_DIR', '.claude');
 const CODEX_DIR = home('CODEX_HOME', '.codex');
 const TARGETS = [path.join(CLAUDE_DIR, 'skills'), path.join(CODEX_DIR, 'skills')];
+const THEMES = path.join(ROOT, 'themes');
+// T3 Code publishes every <id>.json in this folder as a theme. It accepts a linked folder, not linked files.
+const T3_USERDATA = process.env.T3_USERDATA_DIR || path.join(os.homedir(), '.t3', 'userdata');
+const T3_THEMES = path.join(T3_USERDATA, 'themes');
 const INSTRUCTION_FILES = [path.join(CLAUDE_DIR, 'CLAUDE.md'), path.join(CODEX_DIR, 'AGENTS.md')];
 
 fs.mkdirSync(STATE, { recursive: true });
@@ -157,6 +161,37 @@ function link() {
   return notes;
 }
 
+// Points T3 Code's themes folder at the repo. Skipped on machines without T3 Code.
+function linkThemes() {
+  const notes = [];
+  if (!fs.existsSync(T3_USERDATA)) return notes;
+  fs.mkdirSync(THEMES, { recursive: true });
+  let stat = null;
+  try {
+    stat = fs.lstatSync(T3_THEMES);
+  } catch {}
+  if (stat?.isSymbolicLink()) {
+    const real = realOrNull(T3_THEMES);
+    if (real && samePath(real, realOrNull(THEMES))) return notes;
+    removeLink(T3_THEMES);
+  } else if (stat?.isDirectory()) {
+    // Keep themes already published on this machine: move them into the repo unless one there has the same id.
+    for (const name of fs.readdirSync(T3_THEMES)) {
+      const src = path.join(T3_THEMES, name);
+      const dest = path.join(THEMES, name);
+      if (!name.endsWith('.json') || !fs.lstatSync(src).isFile() || fs.existsSync(dest)) continue;
+      fs.copyFileSync(src, dest);
+      notes.push(`moved theme ${name} into the repo`);
+    }
+    notes.push(`backed up ${T3_THEMES} to ${backup(T3_THEMES, 't3')}`);
+  } else if (stat) {
+    notes.push(`backed up ${T3_THEMES} to ${backup(T3_THEMES, 't3')}`);
+  }
+  fs.symlinkSync(THEMES, T3_THEMES, IS_WIN ? 'junction' : 'dir');
+  notes.push(`linked ${T3_THEMES}`);
+  return notes;
+}
+
 function linkProblems() {
   const problems = [];
   for (const target of TARGETS) {
@@ -165,6 +200,10 @@ function linkProblems() {
       const real = realOrNull(dest);
       if (!real || !samePath(real, realOrNull(path.join(SKILLS, name)))) problems.push(`${dest} is not linked to the repo`);
     }
+  }
+  if (fs.existsSync(T3_USERDATA)) {
+    const real = realOrNull(T3_THEMES);
+    if (!real || !samePath(real, realOrNull(THEMES) ?? '')) problems.push(`${T3_THEMES} is not linked to the repo`);
   }
   return problems;
 }
@@ -215,7 +254,7 @@ function exchange(reason) {
         return readJson(STATUS, null);
       }
     }
-    const notes = link();
+    const notes = [...link(), ...linkThemes()];
     writeInstructions();
     for (const n of notes) log(n);
     const parts = [reason];
@@ -365,6 +404,13 @@ a skill run \`node "${root}/sync.mjs" --status\`. If the watcher is not running,
 run \`node "${root}/sync.mjs"\`, which commits, pulls, pushes and links once. If it
 reports any other problem, tell the user.
 
+## T3 Code themes
+
+\`~/.t3/userdata/themes\` is a link to \`${root}/themes\`, so a theme published
+with \`t3_theme_set\` is saved to the repo and synced to the user's other
+machines, where it appears in T3 Code's Settings → Appearance. Reuse the
+theme's id when changing it, so the same file updates instead of a new theme.
+
 ## Lifeboard
 
 The user keeps their to-dos, reminders, events and daily brief on Lifeboard, a
@@ -437,7 +483,7 @@ if (args.includes('--watch')) {
 } else if (args.includes('--status')) {
   await status();
 } else if (args.includes('--install')) {
-  for (const n of link()) console.log(n);
+  for (const n of [...link(), ...linkThemes()]) console.log(n);
   writeInstructions();
   installAutostart();
   await stopWatcher();

@@ -29,6 +29,19 @@ removed.
 | Windows (work) | `C:\Users\Sean Carr\carrStack` |
 | Windows (second PC) | wherever you clone it |
 
+## T3 Code themes
+
+`themes/` holds T3 Code themes. On a machine with T3 Code installed, the sync
+links `~/.t3/userdata/themes` to this folder (any themes already there are
+moved in first), so every theme here appears in T3 Code under
+**Settings → Appearance**. Nothing changes until you pick one.
+
+To make or change a theme, ask an agent in a Full access T3 Code thread, for
+example "make a carrstack theme with a navy sidebar". It publishes
+`themes/<id>.json` and the watcher syncs it. A theme built in T3 Code's own
+editor stays on that machine until you export it as JSON into `themes/`. The
+filename is the theme id, so keep it when updating a theme.
+
 ## Setup on a machine
 
 Needs `node` and `git` with push access to this repo.

@@ -1,0 +1,22 @@
+{
+  "name": "ticket-triage",
+  "goal": "Triage support tickets into the right component, team and severity.",
+  "invoke": {
+    "type": "command",
+    "command": ["python", "hillclimb/adapter.py"],
+    "input": "json",
+    "timeout_s": 120,
+    "workers": 4
+  },
+  "output": "json",
+  "editable": ["app/prompt.md", "app/triage.py"],
+  "frozen": ["hillclimb/adapter.py", "hillclimb/judge.py", "data/policy.md"],
+  "target": { "metric": "check_rate", "value": 0.95 },
+  "guards": [
+    { "metric": "errors", "max_worse": 0 },
+    { "metric": "latency_p50_ms", "max_worse_pct": 25 }
+  ],
+  "repeat": 3,
+  "budget": 10,
+  "stagnation_after": 3
+}

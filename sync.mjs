@@ -38,7 +38,15 @@ const THEMES = path.join(ROOT, 'themes');
 // T3 Code publishes every <id>.json in this folder as a theme. It accepts a linked folder, not linked files.
 const T3_USERDATA = process.env.T3_USERDATA_DIR || path.join(os.homedir(), '.t3', 'userdata');
 const T3_THEMES = path.join(T3_USERDATA, 'themes');
-const INSTRUCTION_FILES = [path.join(CLAUDE_DIR, 'CLAUDE.md'), path.join(CODEX_DIR, 'AGENTS.md')];
+const GEMINI_DIR = home('GEMINI_HOME', '.gemini'); // Gemini CLI and Antigravity read GEMINI.md here
+const OPENCODE_DIR = path.join(process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config'), 'opencode');
+// Each file is only written when its tool's folder exists on this machine.
+const INSTRUCTION_FILES = [
+  path.join(CLAUDE_DIR, 'CLAUDE.md'),
+  path.join(CODEX_DIR, 'AGENTS.md'),
+  path.join(GEMINI_DIR, 'GEMINI.md'),
+  path.join(OPENCODE_DIR, 'AGENTS.md'),
+];
 
 fs.mkdirSync(STATE, { recursive: true });
 

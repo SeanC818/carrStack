@@ -55,7 +55,9 @@ merge gate.
 
 Fetch the target branch and check the live PR's head, base, checks, reviews,
 and mergeability. Confirm it is open, not a draft, and not set to merge
-without the user. If someone else merged it, report that instead.
+without the user. If someone else merged it, use
+[cleanup-pr](../cleanup-pr/SKILL.md) to clean up the local and remote branches
+and report the merge instead.
 
 - **Ready to merge:** the merge gate passes. Leave the PR open and unmerged.
 - **Waiting for required approval:** only human approval remains. Confirm

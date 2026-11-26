@@ -92,7 +92,9 @@ For a `MODERNIZE` disposition:
 6. Push with `--force-with-lease` tied to the previously observed remote head.
    If the lease fails, fetch and reassess rather than overwriting new work.
 
-Do not merge the PR.
+Do not merge the PR. Remove any clean disposable worktree you created once the
+push succeeds. If the user authorizes closing or abandoning a `CLOSE` PR, use
+[cleanup-pr](../cleanup-pr/SKILL.md) to clean up the local and remote branches.
 
 ## Report
 

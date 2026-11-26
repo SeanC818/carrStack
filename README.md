@@ -85,15 +85,19 @@ check `git remote -v` and read `references/github.md` or
 | `file-pr` | "file a PR" | Files a short PR that leads with the problem, not an inventory of changes. |
 | `takeover` | "take over" | Finishes someone else's PR, branch, or agent thread, and keeps their credit. |
 | `babysit-pr` | "babysit" | Watches a PR through CI and review bots, and fixes the real findings. |
+| `cleanup-pr` | "clean up", "clean up branches" | Cleans up merged local and remote branches, stale worktrees, and PR watches. |
 | `modernize` | "modernize" | Rebases an old PR and decides if it should still exist. |
 | `leaving-pr-comments` | (automatic) | Formats comments that an agent posts on your behalf. |
+| `hillclimb` | "hillclimb", "hill climb" | Sets up an eval-driven improvement loop with a frozen grader and guardrails. |
 | `lifeboard` | "add to my board", "what's on today" | Reads and updates your Lifeboard (to-dos, events, notes, daily brief) through its MCP server. |
 
 Some skills call others:
 
-- `full-stop` uses `sol-loop`, `file-pr`, and `babysit-pr`.
-- `takeover` uses `modernize`, `file-pr`, `babysit-pr`, and `leaving-pr-comments`.
-- `file-pr`, `babysit-pr`, and `modernize` use `leaving-pr-comments`.
+- `full-stop` uses `sol-loop`, `file-pr`, `babysit-pr`, and `cleanup-pr` (if already merged).
+- `babysit-pr` uses `leaving-pr-comments` and `cleanup-pr` (once merged).
+- `takeover` uses `modernize`, `file-pr`, `babysit-pr`, `leaving-pr-comments`, and `cleanup-pr`.
+- `modernize` uses `leaving-pr-comments` and `cleanup-pr` (on authorized close).
+- `file-pr` uses `leaving-pr-comments`.
 
 Keep personal model preferences in project `AGENTS.md` or `CLAUDE.md` files.
 Cross-provider reviews need the relevant providers configured in T3 Code.

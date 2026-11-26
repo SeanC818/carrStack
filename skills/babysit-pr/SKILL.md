@@ -109,3 +109,7 @@ the PR is ready. Right before a merge, fetch and check the PR again. Never
 merge while it is behind or conflicting, or when base commits that landed
 after the last green run touch this PR's files. Rebase, push, and wait for
 green again.
+
+Once the PR is merged (either by you on explicit request or observed merged by
+the watcher), use [cleanup-pr](../cleanup-pr/SKILL.md) to clean up the local
+and remote branches and any disposable worktree.

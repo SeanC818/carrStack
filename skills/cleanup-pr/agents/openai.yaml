@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cleanup PR"
+  short_description: "Clean up merged local and remote branches, worktrees, and watches"
+  default_prompt: "Use $cleanup-pr to clean up merged local and remote branches and stale worktrees."

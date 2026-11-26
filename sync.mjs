@@ -390,6 +390,9 @@ function removeAutostart() {
 
 function instructionBlock() {
   const root = ROOT.split(path.sep).join('/');
+  // Extra shared rules, edited as plain markdown in the repo.
+  const extraFile = path.join(ROOT, 'instructions.md');
+  const extra = fs.existsSync(extraFile) ? `\n${fs.readFileSync(extraFile, 'utf8').replace(/\r\n/g, '\n').trim()}\n` : '';
   return `${MARK_START}
 ## Skills sync (carrStack)
 
@@ -417,7 +420,7 @@ The user keeps their to-dos, reminders, events and daily brief on Lifeboard, a
 personal board with an MCP server at https://lifeboard.seancarr818.workers.dev/mcp.
 When they mention a task, reminder, deadline, their day, or ask you to "add" or
 "track" something, use the \`lifeboard\` skill and its MCP tools.
-${MARK_END}`;
+${extra}${MARK_END}`;
 }
 
 function writeInstructions(remove = false) {
